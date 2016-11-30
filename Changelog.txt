@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin aliddns Changelog
 ===========================================
+0.6
+   - fix	fix some column won't hide when toggle switch off
+
 0.5
    - update	default use interface ppp0 to update ip
    - fix	fix the exclamation point prompt in the network map
