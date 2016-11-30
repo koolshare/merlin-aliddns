@@ -99,7 +99,7 @@
                 						    </tr>
                 						    <tr id="curl_tr">
                 						        <th title="可自行修改命令行，以获得正确的公网IP。如添加 '--interface vlan2' 以指定多播情况下的端口支持">获得IP命令(?)</th>
-                						        <td><textarea id="aliddns_curl" class="input_ss_table" style="width: 94%; height: 2.4em"><% dbus_get_def("aliddns_curl", "curl -s whatismyip.akamai.com"); %></textarea></td>
+                						        <td><textarea id="aliddns_curl" class="input_ss_table" style="width: 94%; height: 2.4em"><% dbus_get_def("aliddns_curl", "curl -s --interface ppp0 whatismyip.akamai.com"); %></textarea></td>
                 						    </tr>
                 						    <tr id="ttl_tr">
                 						        <th title="设置解析TTL，默认10分钟，免费版的范围是600-86400">TTL(?)</th>

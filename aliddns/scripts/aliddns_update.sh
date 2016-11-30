@@ -31,6 +31,9 @@ then
     then
         echo "skipping"
         dbus set aliddns_last_act="$now: skipped($ip)"
+	nvram set ddns_enable_x=1
+	nvram set ddns_hostname_x="$aliddns_name"."$aliddns_domain"
+	ddns_custom_updated 1
         exit 0
     fi 
 fi
@@ -98,5 +101,7 @@ if [ "$aliddns_record_id" = "" ]; then
 else
     dbus ram aliddns_record_id=$aliddns_record_id
     dbus ram aliddns_last_act="$now: success($ip)"
+    nvram set ddns_enable_x=1
     nvram set ddns_hostname_x="$aliddns_name"."$aliddns_domain"
+    ddns_custom_updated 1
 fi
