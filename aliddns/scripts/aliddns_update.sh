@@ -21,7 +21,13 @@ die () {
 
 ip=`$aliddns_curl 2>&1` || die "$ip"
 
-current_ip=`nslookup $aliddns_name.$aliddns_domain $aliddns_dns 2>&1`
+#support @ record nslookup
+if [ "$aliddns_name" = "@" ]
+then
+  current_ip=`nslookup $aliddns_domain $aliddns_dns 2>&1`
+else
+  current_ip=`nslookup $aliddns_name.$aliddns_domain $aliddns_dns 2>&1`
+fi
 
 if [ "$?" -eq "0" ]
 then
@@ -36,6 +42,9 @@ then
 	ddns_custom_updated 1
         exit 0
     fi 
+# fix when A record removed by manual dns is always update error
+else
+    unset aliddns_record_id
 fi
 
 
@@ -69,16 +78,29 @@ get_recordid() {
 }
 
 query_recordid() {
-    send_request "DescribeSubDomainRecords" "SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&SubDomain=$aliddns_name.$aliddns_domain&Timestamp=$timestamp"
+    send_request "DescribeSubDomainRecords" "SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&SubDomain=$aliddns_name1.$aliddns_domain&Timestamp=$timestamp"
 }
 
 update_record() {
-    send_request "UpdateDomainRecord" "RR=$aliddns_name&RecordId=$1&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$aliddns_ttl&Timestamp=$timestamp&Type=A&Value=$ip"
+    send_request "UpdateDomainRecord" "RR=$aliddns_name1&RecordId=$1&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$aliddns_ttl&Timestamp=$timestamp&Type=A&Value=$ip"
 }
 
 add_record() {
-    send_request "AddDomainRecord&DomainName=$aliddns_domain" "RR=$aliddns_name&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$aliddns_ttl&Timestamp=$timestamp&Type=A&Value=$ip"
+    send_request "AddDomainRecord&DomainName=$aliddns_domain" "RR=$aliddns_name1&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$aliddns_ttl&Timestamp=$timestamp&Type=A&Value=$ip"
 }
+
+#add support */%2A and @/%40 record
+case  $aliddns_name  in
+      \*)
+        aliddns_name1=%2A
+        ;;
+      \@)
+        aliddns_name1=%40
+        ;;
+      *)
+        aliddns_name1=$aliddns_name
+        ;;
+esac
 
 if [ "$aliddns_record_id" = "" ]
 then
