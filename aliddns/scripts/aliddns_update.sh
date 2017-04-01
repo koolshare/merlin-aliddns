@@ -43,8 +43,9 @@ then
           nvram set ddns_hostname_x="$aliddns_domain"
         else
           nvram set ddns_hostname_x="$aliddns_name"."$aliddns_domain"
-	ddns_custom_updated 1
-        exit 0
+	  ddns_custom_updated 1
+          exit 0
+	fi
     fi 
 # fix when A record removed by manual dns is always update error
 else
@@ -133,5 +134,6 @@ else
        nvram set ddns_hostname_x="$aliddns_domain"
     else
       nvram set ddns_hostname_x="$aliddns_name"."$aliddns_domain"
-    ddns_custom_updated 1
+      ddns_custom_updated 1
+    fi
 fi
