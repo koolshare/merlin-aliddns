@@ -131,9 +131,10 @@ else
     nvram set ddns_enable_x=1
 #web ui show without @.
     if [ "$aliddns_name" = "@" ] ;then
-       nvram set ddns_hostname_x="$aliddns_domain"
+        nvram set ddns_hostname_x="$aliddns_domain"
+        ddns_custom_updated 1
     else
-      nvram set ddns_hostname_x="$aliddns_name"."$aliddns_domain"
-      ddns_custom_updated 1
+        nvram set ddns_hostname_x="$aliddns_name"."$aliddns_domain"
+        ddns_custom_updated 1
     fi
 fi
