@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin aliddns Changelog
 ===========================================
+1.2
+   - fix	fix interval time scale
+1.1
+   - fix	fix won't work in X7.9.1 fw
+
 0.7
    - fix	add * and @ support
 

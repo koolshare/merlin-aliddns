@@ -4,6 +4,7 @@ source /koolshare/scripts/base.sh
 eval `dbus export aliddns`
 
 start_aliddns(){
+	aliddns_interval=$(($aliddns_interval / 60))
 	cru a aliddns_checker "*/$aliddns_interval * * * * /koolshare/scripts/aliddns_update.sh"
 	sh /koolshare/scripts/aliddns_update.sh
 
